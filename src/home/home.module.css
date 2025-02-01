@@ -1,0 +1,231 @@
+#main{
+    background-color: whitesmoke;
+
+}
+
+.nav{
+    width: 100vw;
+    height: 10vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+    
+}
+
+.logo{
+    height: 5vh;
+}
+.account{
+    height: 5vh;
+}
+.footer{
+    width: 100vw;
+    height: 11vh;
+    background-color: aliceblue;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.addStudent{
+    width: 40vw;
+    height: 7vh;
+    font-size: 1.3rem;
+    background-color: #F56B00;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    
+}
+
+.StudentEntrySection{
+    position: relative;
+    position: absolute;
+    z-index: 5;
+    background-color: aliceblue;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    
+    width: 80vw;
+    height: 40vh;
+    box-shadow: 5px 5px 20px rgba(0,0,0);
+}
+
+.inputEnrollment{
+    top: 40%;
+}
+
+.StudentEntrySection input{
+    width: 60vw;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 5vh;
+    font-size: 1.2rem;
+    border: none;
+    background-color: transparent;
+    border-bottom: 2px solid #121323;
+}
+
+.cross{
+    width: 10vw;
+    position: absolute;
+    top: 2%;
+    left: 4%;
+}
+
+.submitBtn{
+    position: absolute;
+    top:72%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    background-color: #F56B00;
+    border: none;
+
+    width: 40vw;
+    height: 6vh;
+    border-radius: 50px;
+    font-size: 1.6rem;
+
+}
+.outsideStudentsList{
+    width: 95vw;
+    height: 63.6vh;
+    position: absolute;
+    top: 18%;
+    left: 50%;
+    transform: translate(-50%);
+    overflow-y: auto;
+    ol{
+        width: 93vw;
+        height: 63.5vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+.studentItem{
+    width: 90vw;
+    height: 9vh;
+    background-color: aliceblue;
+    list-style: none;
+    margin: 10px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 5px;
+    border-radius: 7px;
+    
+}
+.title{
+    margin-top: 20px;
+}
+.aboveDets{
+    display: flex;
+    justify-content: space-between;
+    
+}
+.belowDets{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.studentEnteredBtn{
+    width: 30vw;
+    background-color: #F56B00;
+    color: white;
+    border: none;
+    height: 4.5vh;
+    font-size: 0.9rem;
+    border-radius: 5px;
+}
+
+.profile{
+    width: 80vw;
+    height: 50vh;
+    box-shadow: 7px 7px 15px rgba(0,0,0);
+    position: absolute;
+    z-index: 10;
+    top:10%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: aliceblue;
+    position: relative;
+
+}
+.profilePic{
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 5px solid #F56B00;
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+
+.profilePic img{
+    height: 155px;
+    width: 155px;
+    border-radius: 50%;
+}
+.logoutBtn{
+    position: absolute;
+    width: 30vw;
+    height: 7vh;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 20px;
+    background-color: #F56B00;
+    color: white;
+    font-size: 1.5rem;
+    border: none;
+
+}
+.profileBack{
+    height: 6vh;
+    margin: 10px 0px 0px 10px;
+}
+
+.searchBtn{
+    width: 10vw;
+    position: absolute;
+    top: 13%;
+    left: 80%;
+}
+.highText{
+    color: #F56B00;
+}
+.paymentPage{
+    position: absolute;
+    width: 100vw;
+    height: 70vh;
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 0px 10px;
+    font-weight:500;
+
+}
+.registerBtn{
+   
+    margin-top: 40px;
+    width: 90vw;
+    height: 10vh;
+    background-color: #F56B00;
+    color: white;
+    font-size: 2.5rem;
+    border: none;
+    border-radius: 20px;
+
+}

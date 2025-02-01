@@ -1,0 +1,137 @@
+.main{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: #121323;
+
+}
+.main button{
+
+}
+.back{
+    width: 10vw;
+    background-color: transparent;
+    border: none;
+    margin: 20px;
+}
+.hero{
+    width: 100vw;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+
+}
+.welcome{
+    font-size: 2.5rem;
+
+}
+.continue{
+    font-size: 1rem;
+    font-weight: 900;
+    color: #8a8b94;
+    margin-top: 10px;
+}
+.inputEmail{
+    margin: 60px 20px 0px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+
+}
+.inputPassword{
+    margin: 40px 20px 0px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+}
+.inputOrganisationId{
+    margin: 40px 20px 0px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+}
+
+.loginBtn{
+    width: 55vw;
+    height: 6vh;
+    position: absolute;
+    top: 63%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #F56B00;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-size: 1.6rem;
+
+}
+.forgetPassword{
+    position: absolute;
+    top: 72%;
+    font-size: 1rem;
+    background-color: transparent;
+
+    border: none;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+.line {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 20px 0;
+  }
+/* .googleLogin{
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50px;
+    width: 70vw;
+    height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    img{
+        height: 4vh;
+    }
+    background-color: transparent;
+} */
+
+.signUp{
+    width: 60vw;
+    position: absolute;
+    top: 82%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    button{
+        color: #F56B00;
+        background-color: transparent;
+        border: none;
+        
+
+    }
+}

@@ -1,0 +1,67 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.buttons{
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.x{
+    width: 10vw;
+    position: absolute;
+    top: 2%;
+    left: 10%;
+    transform: translateX(-50%);
+}
+
+
+.logo{
+    position: absolute;
+    top: 19%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vw;
+
+}
+
+.login{
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+}
+.login button{
+    width: 55vw;
+    height: 7vh;
+    border: none;
+    color: white;
+    font-size: 1.7rem;
+    background-color: #F56B00;
+    border-radius: 10px;
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+}
+
+.register{
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+.register button{
+    width: 55vw;
+    height: 7vh;
+    border: 3px solid #F56B00;
+    color: black;
+    font-size: 1.7rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+}

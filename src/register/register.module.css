@@ -1,0 +1,128 @@
+.main{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: #121323;
+
+}
+.main button{
+
+}
+.back{
+    width: 10vw;
+    background-color: transparent;
+    border: none;
+    margin: 20px;
+}
+.hero{
+    width: 100vw;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+
+}
+.welcome{
+    font-size: 2.5rem;
+
+}
+.continue{
+    font-size: 1rem;
+    font-weight: 900;
+    color: #8a8b94;
+    margin-top: 10px;
+}
+.inputUsername{
+    margin: 40px 20px 0px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+}
+.inputEmail{
+    margin: 40px 20px 0px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+
+}
+.inputPassword{
+    margin: 40px 20px 0px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+}
+.inputOrganisationId{
+    margin: 40px 20px 0px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+}
+.inputOrganisationPassword{
+    margin: 40px 20px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+}
+
+.loginBtn{
+    width: 55vw;
+    height: 6vh;
+    position: absolute;
+    top: 73%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #F56B00;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-size: 1.6rem;
+
+}
+.forgetPassword{
+    position: absolute;
+    top: 66%;
+    font-size: 0.9rem;
+    border: none;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+
+
+.signUp{
+    width: 52vw;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    button{
+        color: #F56B00;
+        background-color: transparent;
+        border: none;
+        
+
+    }
+}
