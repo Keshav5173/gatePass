@@ -18,10 +18,13 @@ export const useOrganisation = () => {
 
 export const OrganisationProvider = ({ children }) => {
     const [organisationId, setOrganisationId] = useState('');
+    const [email, setEmail] = useState(false);
 
     const value = {
         organisationId,
-        setOrganisationId
+        setOrganisationId, 
+        email,
+        setEmail
     };
 
     return (

@@ -11,6 +11,25 @@
     top: 0;
     left: 0;
 }
+.nav{
+    width: 100vw;
+    height: 7vh;
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 20px;
+    align-items: center;
+
+}
+.appName{
+    font-size: 2rem;
+    color: #F56B00;
+    
+}
+.logo{
+
+    width: 30vw;
+}
+
 
 .x{
     width: 10vw;
@@ -20,23 +39,19 @@
     transform: translateX(-50%);
 }
 
-
-.logo{
-    position: absolute;
-    top: 19%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80vw;
-
-}
-
-.login{
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translateX(-50%);
+.footer{
+    width: 100vw;
+    height: 10vh;
     
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
 .login button{
     width: 55vw;
     height: 7vh;
@@ -48,20 +63,89 @@
     box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
 }
 
-.register{
+.highText{
+    color: #F56B00;
+}
+.paymentPage{
     position: absolute;
-    top: 75%;
-    left: 50%;
-    transform: translateX(-50%);
+    width: 100vw;
+    height: 75vh;
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 0px 10px;
+    font-weight:500;
+    overflow-y: auto;
 
 }
-.register button{
-    width: 55vw;
-    height: 7vh;
-    border: 3px solid #F56B00;
-    color: black;
-    font-size: 1.7rem;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+
+@media (min-width:400px) {
+    .paymentPage{
+        font-size: 1.35rem;
+    }
+}
+
+@media(min-width: 500px){
+    .paymentPage{
+        font-size: 1.55rem;
+    }
+    .appName{
+        font-size: 2.5rem;
+    }
+    .logo{
+        width: 40vw;
+    }
+}
+
+@media(min-width: 670px){
+    .paymentPage{
+        font-size: 1.85rem;
+    }
+    .logo{
+        width: 35vw;
+    }
+}
+@media(min-width: 880px){
+    .paymentPage{
+        font-size: 2rem;
+    }
+    .logo{
+        width: 28vw;
+    }
+    .login button{
+        font-size: 4rem;
+        width: 40vw;
+        height: 10vh;
+    }
+    .register button{
+        width: 40vw;
+        font-size: 3rem;
+        height: 10vh;
+    }
+
+}
+@media(min-width: 1000px){
+    .paymentPage{
+        font-size: 2.35rem;
+    }
+    .login button{
+        font-size: 3rem;
+        width: 40vw;
+        height: 10vh;
+    }
+    .register button{
+        width: 40vw;
+        font-size: 3rem;
+        height: 10vh;
+    }
+    .logo{
+        height: 45vh;
+        width: 25vw;
+    }
+}
+@media(min-width:1500px){
+   
+    .logo{
+        top: 0%;
+        width: 23vw;
+    }
 }

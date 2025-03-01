@@ -5,14 +5,14 @@ import { getFirestore } from "firebase/firestore";
 
 // Firebase configuration object
 const firebaseConfig = {
-  apiKey: "AIzaSyDyF-ScyV0oCxsUKEMkP1zz8Mvtahu2HRI",
-  authDomain: "attendenceapp-90319.firebaseapp.com",
-  databaseURL: "https://attendenceapp-90319-default-rtdb.asia-southeast1.firebasedatabase.app/",
-  projectId: "attendenceapp-90319",
-  storageBucket: "attendenceapp-90319.appspot.com",
-  messagingSenderId: "248030669461",
-  appId: "1:248030669461:web:585f77b9da5cb1fd05899c",
-  measurementId: "G-9322E9XM2X",
+  apiKey: "AIzaSyAuPNOVk4jV4FnmeXdeVduYWPF-kr-PAmw",
+  authDomain: "attendenceapp-e0294.firebaseapp.com",
+  databaseURL: "https://attendenceapp-e0294-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "attendenceapp-e0294",
+  storageBucket: "attendenceapp-e0294.firebasestorage.app",
+  messagingSenderId: "941645434708",
+  appId: "1:941645434708:web:d592d6186ae60202bfc2c1",
+  measurementId: "G-ZL0ZLT2XF1"
 };
 
 // Initialize Firebase app

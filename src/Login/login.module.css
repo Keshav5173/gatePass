@@ -11,7 +11,7 @@
 
 }
 .back{
-    width: 10vw;
+    width: 9vw;
     background-color: transparent;
     border: none;
     margin: 20px;
@@ -29,7 +29,7 @@
 
 }
 .continue{
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 900;
     color: #8a8b94;
     margin-top: 10px;
@@ -83,7 +83,7 @@
 .forgetPassword{
     position: absolute;
     top: 72%;
-    font-size: 1rem;
+    font-size: 1.2rem;
     background-color: transparent;
 
     border: none;
@@ -101,6 +101,7 @@
     justify-content: center;
     text-align: center;
     margin: 20px 0;
+    font-size: 1.2rem;
   }
 /* .googleLogin{
     position: absolute;
@@ -121,17 +122,82 @@
 } */
 
 .signUp{
-    width: 60vw;
+    width: 100vw;
     position: absolute;
     top: 82%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1rem;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    font-size: 1.2rem;
     button{
         color: #F56B00;
+        font-size: 1.2rem;
         background-color: transparent;
         border: none;
         
 
     }
+}
+@media (min-width:900px) {
+    .back{
+        width: 5vw;
+    }
+    .loginBtn{
+        width: 40vw;
+        height: 8vh;
+        top: 79%;
+    }
+    .forgetPassword{
+        top: 88%;
+        font-size: 1.5rem;
+    }
+    
+}
+@media (min-width:1400px) {
+    .loginBtn{
+        top: 66%;
+    }
+    .forgetPassword{
+        top: 78%;
+    }
+    .line{
+        top: 82%;
+    }
+    .signUp{
+        top: 90%;
+    }
+}
+@media (max-height:880px) {
+    .inputEmail{
+        margin: 40px 20px 0px;
+    }
+    .loginBtn{
+        top: 76%;
+    }
+    .forgetPassword{
+        top: 88%;
+    }
+    
+}
+@media (max-height:700px) {
+    .back{
+        width: 4.5vw;
+        margin: 10px;
+    }
+    .inputEmail{
+        margin: 30px 20px 0px;
+    }
+    .inputOrganisationId{
+        margin: 30px 20px 0px;
+    }
+    .inputPassword{
+        margin: 30px 20px 0px;
+    }
+    .loginBtn{
+        top: 75%;
+    }
+    .forgetPassword{
+        top: 88%;
+    }
+    
 }

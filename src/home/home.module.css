@@ -5,7 +5,7 @@
 
 .nav{
     width: 100vw;
-    height: 10vh;
+    height: 7vh;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -21,7 +21,7 @@
 }
 .footer{
     width: 100vw;
-    height: 11vh;
+    height: 10vh;
     background-color: aliceblue;
     position: absolute;
     bottom: 0;
@@ -89,24 +89,45 @@
     color: white;
     background-color: #F56B00;
     border: none;
-
     width: 40vw;
     height: 6vh;
     border-radius: 50px;
     font-size: 1.6rem;
 
+
 }
+.switchMode{
+    margin-top: 10px;
+    background-color: aliceblue;
+    width: 100vw;
+    height: 7vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 50px;
+    
+}
+.switchMode button{
+    width: 25vw;
+    height: 5vh;
+    font-size: 1.3rem;
+    background-color: #F56B00;
+    color: white;
+    border: none;
+    border-radius: 7px;
+}
+
 .outsideStudentsList{
     width: 95vw;
     height: 63.6vh;
     position: absolute;
-    top: 18%;
+
     left: 50%;
     transform: translate(-50%);
     overflow-y: auto;
     ol{
         width: 93vw;
-        height: 63.5vh;
+        
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -115,7 +136,7 @@
 .studentItem{
     width: 90vw;
     height: 9vh;
-    background-color: aliceblue;
+
     list-style: none;
     margin: 10px 0px;
     display: flex;
@@ -126,6 +147,7 @@
     
 }
 .title{
+    margin-left: 10px;
     margin-top: 20px;
 }
 .aboveDets{
@@ -181,9 +203,9 @@
 }
 .logoutBtn{
     position: absolute;
-    width: 30vw;
+    width: 45vw;
     height: 7vh;
-    top: 50%;
+    top: 60%;
     left: 50%;
     transform: translateX(-50%);
     border-radius: 20px;
@@ -193,39 +215,201 @@
     border: none;
 
 }
+.register{
+    position: absolute;
+    width: 45vw;
+    height: 7vh;
+    top: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 20px;
+    background-color: #F56B00;
+    color: white;
+    font-size: 1.5rem;
+    border: none;
+}
 .profileBack{
     height: 6vh;
     margin: 10px 0px 0px 10px;
 }
 
-.searchBtn{
-    width: 10vw;
-    position: absolute;
-    top: 13%;
-    left: 80%;
-}
-.highText{
-    color: #F56B00;
-}
-.paymentPage{
-    position: absolute;
+.registerMain{
     width: 100vw;
-    height: 70vh;
-    text-align: center;
-    font-size: 1.2rem;
-    padding: 0px 10px;
-    font-weight:500;
+    height: 100vh;
+    position: absolute;
+    z-index: 50;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: #121323;
+    background-color: aliceblue;
 
 }
-.registerBtn{
-   
-    margin-top: 40px;
-    width: 90vw;
-    height: 10vh;
-    background-color: #F56B00;
-    color: white;
-    font-size: 2.5rem;
-    border: none;
-    border-radius: 20px;
 
+.backRegister{
+    width: 10vw;
+    background-color: transparent;
+    border: none;
+    margin: 20px;
+}
+.registerHero{
+    width: 100vw;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+
+}
+
+.inputUsername{
+    margin: 40px 20px 0px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+}
+.inputEmail{
+    margin: 40px 20px 0px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+
+}
+.inputPassword{
+    margin: 40px 20px 0px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+}
+.inputOrganisationId{
+    margin: 40px 20px 0px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+}
+.inputOrganisationPassword{
+    margin: 40px 20px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+}
+
+.loginBtn{
+    width: 55vw;
+    height: 6vh;
+    position: absolute;
+    top: 73%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #F56B00;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-size: 1.6rem;
+
+}
+.forgetPassword{
+    position: absolute;
+    top: 66%;
+    font-size: 0.9rem;
+    border: none;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+
+.signUp{
+    width: 52vw;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    button{
+        color: #F56B00;
+        background-color: transparent;
+        border: none; 
+    }
+}
+
+@media (min-width:540px) {
+    .back{
+        width: 7vw;
+        margin: 10px;
+    }
+    .loginBtn{
+        top: 85%;
+        width: 40vw;
+        height: 8vh;
+    }
+}
+@media (max-height:650px) {
+    .back{
+        width: 4vw;
+    }
+    .inputEmail{
+        margin: 30px 20px 0px;
+    }
+    .inputOrganisationId{
+        margin: 30px 20px 0px;
+    }
+    .inputPassword{
+        margin: 30px 20px 0px;
+    }
+    .inputUsername{
+        margin: 30px 20px 0px;
+    }
+    .loginBtn{
+        top: 90%;
+    }
+}
+
+
+@media (min-width:340px) {
+    .studentEnteredBtn{
+      
+        width: 35vw;
+    }
+}
+@media (min-width:900px) {
+    .studentEnteredBtn{
+        width: 20vw;
+        font-size: 1rem;
+    }
+    .addStudent{
+        width: 25vw;
+        font-size: 1.8rem;
+    }
+    .profile{
+        width: 40vw;
+    }
+    .logoutBtn{
+        width: 20vw;
+    }
+    .register{
+        width: 20vw;
+    }
+   .cross{
+    width: 5vw;
+   }
+    
 }

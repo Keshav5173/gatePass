@@ -16,20 +16,39 @@ function StartingPage() {
     navigate("/login"); 
   };
 
-  const handleRegister = () => {
-    navigate("/register"); 
-  };
+  
 
   return (
     <div className={styles.buttons}>
-      <img className={styles.logo} src="tecXaroLogo.png" alt="Logo" />
-      <h1>Gate Pass+</h1>
-      <div className={styles.login}>
-        <button onClick={handleLogin}>Login</button>
+      <div className={styles.nav}>
+        <h1 className={styles.appName}>Gate Pass+</h1>
+        <img className={styles.logo} src="tecXaroLogo.png" alt="Logo" />
       </div>
-
-      <div className={styles.register}>
-        <button onClick={handleRegister}>Register</button>
+      <div className={styles.paymentPage}>
+                          <p className={styles.textInfo}>The <span className={styles.highText}>GatePass+</span> addresses a significant issue in hostel
+                              management, where students manually record their entries and exits
+                              in physical registers. This traditional system is highly prone to 
+                              errors, as <span className={styles.highText}>students often fill in 
+                              incorrect details,</span> manipulate their entry times, or even evade 
+                              proper logging. Additionally, managing and retrieving past records 
+                              becomes cumbersome, leading to inefficiencies in tracking student 
+                              movements. To solve this, the app provides a 
+                              <span className={styles.highText}>digital solution</span> where 
+                              hostel security can seamlessly enter a students 
+                              enrollment number and this app will fetch rest important information 
+                              from database, ensuring accurate and tamper-proof logging of 
+                              <span className={styles.highText}>  entries and exits.</span> The 
+                              system also enables <span className={styles.highText}> real-time 
+                              tracking </span>of students currently outside the campus and maintains a 
+                              structured history of all movements significantly improving 
+                              ,<span className={styles.highText}>security, accountability, and administrative efficiency.</span></p>
+                          
+      
+                      </div>
+      <div className={styles.footer}>
+        <div className={styles.login}>
+          <button className={styles.btn} onClick={handleLogin}>Login</button>
+        </div>
       </div>
     </div>
   );

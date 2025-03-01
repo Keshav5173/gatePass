@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Login.module.css";
 import { useNavigate, Link } from "react-router-dom";
+import { doc, updateDoc } from "firebase/firestore";
 
 import { 
     doSignInWithEmailAndPassword, 
@@ -17,12 +18,14 @@ import { Navigate } from "react-router-dom";
 function Login() {
 
     const { setOrganisationId } = useOrganisation();
+    const {setEmail}= useOrganisation();
     const navigate = useNavigate();
     const { userLoggedIn } = useAuth();
-    const [email, setEmail] = useState('');
+    const [localEmail, setLocalEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSignIn, setIsSignIn] = useState(false);
-    const [organisationId, setOrganisationIdState] = useState(''); // Updated to one state
+    const [organisationId, setOrganisationIdState] = useState('');
+    const [newPass, setNewPass] = useState(false);
 
     useEffect(() => {
         const checkRedirectResult = async () => {
@@ -57,17 +60,22 @@ function Login() {
 
             console.log("Users from Firestore:", users);
 
-            const foundOrganisation = users.find(user => user.orgId === organisationId);
+            const foundOrganisation = users.find(user => user.orgId === organisationId && user.email===localEmail && user.password===password);
 
             if (!foundOrganisation) {
-                alert("Invalid Organisation ID");
+                alert("Invalid data");
+                setLocalEmail("");
+                setPassword("");
+                setOrganisationId("");
                 setIsSignIn(false);
                 return;
             }
 
             // Setting the Organisation ID in the context
             setOrganisationId(organisationId);
-            await doSignInWithEmailAndPassword(email, password);
+            setEmail(localEmail);
+            
+            // await doSignInWithEmailAndPassword(localEmail, password);
             navigate("/home", { state: { organisationId } });
 
         } catch (error) {
@@ -78,18 +86,29 @@ function Login() {
         }
     };
 
-    const handleForgetPassword = () => {
-        if (!email) {
-            alert("Please enter your email first!");
-            return;
-        }
-        doPasswordReset(email)
-            .then(() => alert("Password reset email sent! Check your inbox."))
-            .catch((error) => alert("Error: " + error.message));
-    };
+    // const handleForgetPassword = async () => {
+    //     setNewPass(true);
+    //     const querySnapshot = await getDocs(collection(db, "UserData"));
+    //     const users = querySnapshot.docs.map(doc => ({
+    //         id: doc.id,
+    //         ...doc.data()
+    //     }));
+    
+    //     const foundUser = users.find(user => user.email === localEmail);
+    
+    //     if (foundUser) {
+    //         const userDocRef = doc(db, "UserData", foundUser.id); 
+    //         await updateDoc(userDocRef, {
+    //             password: password, // Update the password
+    //         });
+    //         alert("Password updated successfully.");
+    //     } else {
+    //         alert("User not found.");
+    //     }
+    // };
 
     const handleBackButton = () => {
-        navigate('/start');
+        navigate('/');
     };
 
     return (
@@ -111,8 +130,8 @@ function Login() {
                         className={styles.inputEmail}
                         autoComplete="email"
                         required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={localEmail}
+                        onChange={(e) => setLocalEmail(e.target.value)}
                         type="email"
                         placeholder="Enter your email"
                     />
@@ -123,7 +142,7 @@ function Login() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         type="password"
-                        placeholder="Enter your Password"
+                        placeholder={newPass ? "Enter New password": "Enter password"}
                     />
                     <input
                         className={styles.inputOrganisationId}
@@ -139,14 +158,8 @@ function Login() {
                     </button>
                 </form>
 
-                <button onClick={handleForgetPassword} className={styles.forgetPassword}>Forget password?</button>
-                <div className={styles.line}>
-                    <span>or</span>
-                </div>
-
-                <h5 className={styles.signUp}>
-                    Don't have an account? <Link to={'/register'}><button>Sign up</button></Link>
-                </h5>
+                {/* <button onClick={handleForgetPassword} className={styles.forgetPassword}>Forget password?</button> */}
+                
             </div>
         </div>
     );

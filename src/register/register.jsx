@@ -10,8 +10,9 @@ import { doc, setDoc } from "firebase/firestore";
 function Register() {
     const { userLoggedIn, setUserName } = useAuth();
     const { setOrganisationId } = useOrganisation();
+    const {setEmail} = useOrganisation();
     const [localUserName, setLocalUserName] = useState('');  
-    const [email, setEmail] = useState('');
+    const [localEmail, setLocalEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isRegisteringIn, setIsRegisteringIn] = useState(false);
     const [organisationId, setOrganisationIdState] = useState("");
@@ -19,7 +20,7 @@ function Register() {
     const navigate = useNavigate();
     
     const handleBackButton = () => {
-        navigate('/start');
+        navigate(-1);
     };
 
     const onSubmit = async (e) => {
@@ -31,8 +32,9 @@ function Register() {
     
         try {
             // Register user in Firebase Authentication
-            const userCredential = await doCreateUserWithEmailAndPassword(email, password);
+            const userCredential = await doCreateUserWithEmailAndPassword(localEmail, password);
             const { user } = userCredential;
+            setEmail(localEmail)
             setOrganisationId(organisationId);
     
             // Store additional user data in Firestore
@@ -40,7 +42,7 @@ function Register() {
 
             await setDoc(userDocRef, {
                 name: localUserName,
-                email: email,
+                email: localEmail,
                 orgId: organisationId,
                 createdAt: new Date(),
             });
@@ -48,8 +50,13 @@ function Register() {
             setUserName(localUserName); 
             navigate("/home"); 
         } catch (error) {
-            console.error("Error during registration:", error.message);
-            alert("Registration failed: " + error.message);
+            let errorMessage = "An error occurred.";
+            if (error.code === "auth/email-already-in-use") {
+                errorMessage = "This email is already in use.";
+            } else if (error.code === "auth/invalid-email") {
+                errorMessage = "Invalid email address.";
+            }
+            alert("Registration failed: " + errorMessage);
         } finally {
             setIsRegisteringIn(false);
         }
@@ -87,8 +94,8 @@ function Register() {
                         className={styles.inputEmail}
                         autoComplete="email"
                         required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={localEmail}
+                        onChange={(e) => setLocalEmail(e.target.value)}
                         type="email"
                         placeholder="Enter your email"
                     />

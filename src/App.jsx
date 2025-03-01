@@ -8,8 +8,8 @@ function App() {
   return (
     <Routes>
       {/* Define a route for the root URL */}
-      <Route path="/" element={<Navigate to="/start" replace />} />
-      <Route path="/start" element={<StartingPage />} />
+      {/* <Route path="/" element={<Navigate to="/start" replace />} /> */}
+      <Route path="/" element={<StartingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/home" element={<HomePage />} />
