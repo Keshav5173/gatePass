@@ -15,7 +15,8 @@ function Register() {
     const [localEmail, setLocalEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isRegisteringIn, setIsRegisteringIn] = useState(false);
-    const [organisationId, setOrganisationIdState] = useState("");
+    // const [organisationId, setOrganisationIdState] = useState("");
+    const [localOrganisationId, setOrganisationIdState] = useState("");
 
     const navigate = useNavigate();
     
@@ -24,61 +25,55 @@ function Register() {
     };
 
     const onSubmit = async (e) => {
-        e.preventDefault();
-    
-        if (isRegisteringIn) return; 
-    
-        setIsRegisteringIn(true);
-    
-        try {
-            // Register user in Firebase Authentication
-            const userCredential = await doCreateUserWithEmailAndPassword(localEmail, password);
-            const { user } = userCredential;
-            setEmail(localEmail)
-            setOrganisationId(organisationId);
-    
-            // Store additional user data in Firestore
-            const userDocRef = doc(db, "UserData", user.uid);
+            e.preventDefault();
+        
+            if (isRegisteringIn) return;
+        
+            setIsRegisteringIn(true);
+        
+            try {
 
-            await setDoc(userDocRef, {
-                name: localUserName,
-                email: localEmail,
-                orgId: organisationId,
-                createdAt: new Date(),
-            });
-    
-            setUserName(localUserName); 
-            navigate("/home"); 
-        } catch (error) {
-            let errorMessage = "An error occurred.";
-            if (error.code === "auth/email-already-in-use") {
-                errorMessage = "This email is already in use.";
-            } else if (error.code === "auth/invalid-email") {
-                errorMessage = "Invalid email address.";
+                const userDocRef = collection(db, "UserData");
+        
+                // You can create additional data fields if needed
+                await addDoc(userDocRef, {
+                    name: localUserName,
+                    email: localEmail,
+                    orgId: localOrganisationId,
+                    password: password,
+                    createdAt: new Date(),
+                });
+        
+                setUserName(localUserName);
+                setAddUser(false);
+            } catch (error) {
+                console.error("Registration failed:", error);
+                let errorMessage = "An error occurred.";
+                if (error.code === "auth/email-already-in-use") {
+                    errorMessage = "This email is already in use.";
+                } else if (error.code === "auth/invalid-email") {
+                    errorMessage = "Invalid email address.";
+                }
+                alert("Registration failed: " + errorMessage);
+            } finally {
+                setIsRegisteringIn(false);
             }
-            alert("Registration failed: " + errorMessage);
-        } finally {
-            setIsRegisteringIn(false);
-        }
-    };
+    }; 
 
     return (
-        <div className={styles.main}>
-            {userLoggedIn && <Navigate to="/home" replace />}
-
+        <div className={styles.registerMain}>
+                    
+        
             <nav>
-                <button onClick={handleBackButton} className={styles.back}>
+                <button onClick={handleBackRegisterButton} className={styles.backRegister}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                         <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
                     </svg>
                 </button>
             </nav>
 
-            <div className={styles.hero}>
-                <h1 className={styles.welcome}>Hi!</h1>
-                <h2 className={styles.continue}>Create a new account</h2>
-
-                <form onSubmit={onSubmit}>
+            <div className={styles.registerHero}>
+                    <form onSubmit={onSubmit}>
                     <input
                         className={styles.inputUsername}
                         required
@@ -114,7 +109,7 @@ function Register() {
                         disabled={isRegisteringIn}
                         autoComplete="organization"
                         required
-                        value={organisationId}
+                        value={localOrganisationId}
                         onChange={(e) => setOrganisationIdState(e.target.value)}
                         type="text"
                         placeholder="Enter Organisation Id"
@@ -129,7 +124,7 @@ function Register() {
                 </form>
             </div>
         </div>
-    );
+);
 }
 
 export default Register;

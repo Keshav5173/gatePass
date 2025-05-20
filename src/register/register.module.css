@@ -1,22 +1,23 @@
-.main{
+.registerMain{
     width: 100vw;
     height: 100vh;
+    position: absolute;
+    z-index: 50;
     position: fixed;
     top: 0;
     left: 0;
     color: #121323;
+    background-color: aliceblue;
 
 }
-.main button{
 
-}
-.back{
+.backRegister{
     width: 10vw;
     background-color: transparent;
     border: none;
     margin: 20px;
 }
-.hero{
+.registerHero{
     width: 100vw;
     height: 80vh;
     display: flex;
@@ -24,16 +25,7 @@
     padding: 15px;
 
 }
-.welcome{
-    font-size: 2.5rem;
 
-}
-.continue{
-    font-size: 1.2rem;
-    font-weight: 900;
-    color: #8a8b94;
-    margin-top: 7px;
-}
 .inputUsername{
     margin: 40px 20px 0px;
     color: #121323;
@@ -110,7 +102,6 @@
 
 }
 
-
 .signUp{
     width: 52vw;
     position: absolute;
@@ -121,11 +112,10 @@
     button{
         color: #F56B00;
         background-color: transparent;
-        border: none;
-        
-
+        border: none; 
     }
 }
+
 @media (min-width:540px) {
     .back{
         width: 7vw;

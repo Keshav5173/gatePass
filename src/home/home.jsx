@@ -23,8 +23,6 @@ function HomePage() {
     const [phoneNo, setPhoneNo] = useState("");
     const [enrollmentNo, setEnrollmentNo] = useState("");
     const [disp, setDisp] = useState(false);
-    const [students, setStudents] = useState([]);
-    const [blockedStudents, setBlockedStudents] = useState([]);
     const [profile, setProfile] = useState(false);
     const [suscribed, setSuscribed] = useState(false);
     const { organisationId } = useOrganisation();
@@ -40,10 +38,7 @@ function HomePage() {
     const [localEmail, setLocalEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isRegisteringIn, setIsRegisteringIn] = useState(false);
-    const [localOrganisationId, setOrganisationIdState] = useState("");
     const [penelty, setPenelty] = useState(false);
-    const [nostudentData, setNoStudentData] = useState(false);
-    const [noBlockedStudentData, setNoBlockedStudentData] = useState(false);
     const [outing, setOuting] = useState(true);
     const [dispVacation, setDispVacation]=useState(false);
     const [outingReason, setOutingReason]=useState("");
@@ -260,8 +255,7 @@ function HomePage() {
     const handleRegisterBtn = (event) => {
         event.preventDefault()
         console.log("clicked");
-        // navigate("/register"); 
-        setAddUser(true);
+        navigate("/register"); 
       };
 
     const handleAddStudentClick = () => setDisp(true);
@@ -289,46 +283,8 @@ function HomePage() {
             navigate("/login");
         });
     };
-
-    const handleBackRegisterButton = () => {
-            setAddUser(false);
-        };
     
-        const onSubmit = async (e) => {
-            e.preventDefault();
         
-            if (isRegisteringIn) return;
-        
-            setIsRegisteringIn(true);
-        
-            try {
-
-                const userDocRef = collection(db, "UserData");
-        
-                // You can create additional data fields if needed
-                await addDoc(userDocRef, {
-                    name: localUserName,
-                    email: localEmail,
-                    orgId: localOrganisationId,
-                    password: password,
-                    createdAt: new Date(),
-                });
-        
-                setUserName(localUserName);
-                setAddUser(false);
-            } catch (error) {
-                console.error("Registration failed:", error);
-                let errorMessage = "An error occurred.";
-                if (error.code === "auth/email-already-in-use") {
-                    errorMessage = "This email is already in use.";
-                } else if (error.code === "auth/invalid-email") {
-                    errorMessage = "Invalid email address.";
-                }
-                alert("Registration failed: " + errorMessage);
-            } finally {
-                setIsRegisteringIn(false);
-            }
-    };  
 
     return(
         <div className={styles.main}>
@@ -396,76 +352,12 @@ function HomePage() {
                     <img src="profilePic.avif" alt="" />
                     
                 </div>
+                <h4 className={styles.userEmail}>{storedEmailId}</h4>
                 <button onClick={handleLogOutBtn} className={styles.logoutBtn}>Log out</button>
                 { admin && 
                 (<button onClick={(event)=>handleRegisterBtn(event)} className={styles.register}>Add Member</button>
                 )}
             </div>)}
-            {addUser && (
-                    <div className={styles.registerMain}>
-                    
-        
-                    <nav>
-                        <button onClick={handleBackRegisterButton} className={styles.backRegister}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
-                            </svg>
-                        </button>
-                    </nav>
-        
-                    <div className={styles.registerHero}>
-                         <form onSubmit={onSubmit}>
-                            <input
-                                className={styles.inputUsername}
-                                required
-                                value={localUserName}
-                                onChange={(e) => {
-                                    setLocalUserName(e.target.value);
-                                    setUserName(e.target.value);
-                                }}
-                                type="text"
-                                placeholder="Enter your username"
-                            />
-                            <input
-                                className={styles.inputEmail}
-                                autoComplete="email"
-                                required
-                                value={localEmail}
-                                onChange={(e) => setLocalEmail(e.target.value)}
-                                type="email"
-                                placeholder="Enter your email"
-                            />
-                            <input
-                                className={styles.inputPassword}
-                                disabled={isRegisteringIn}
-                                autoComplete="new-password"
-                                required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                type="password"
-                                placeholder="Enter your Password"
-                            />
-                            <input
-                                className={styles.inputOrganisationId}
-                                disabled={isRegisteringIn}
-                                autoComplete="organization"
-                                required
-                                value={localOrganisationId}
-                                onChange={(e) => setOrganisationIdState(e.target.value)}
-                                type="text"
-                                placeholder="Enter Organisation Id"
-                            />
-                            <button
-                                className={styles.loginBtn}
-                                disabled={isRegisteringIn}
-                                type="submit"
-                            >
-                                {isRegisteringIn ? 'Signing Up...' : 'Sign Up'}
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            )}
         </div>
     )
 }
