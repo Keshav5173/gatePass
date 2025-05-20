@@ -1,0 +1,52 @@
+.studentItem{
+    width: 90vw;
+    height: 9vh;
+    list-style: none;
+    margin: 10px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 5px;
+    border-radius: 7px;
+}
+.title{
+    margin-left: 10px;
+    margin-top: 20px;
+}
+.aboveDets{
+    display: flex;
+    justify-content: space-between;
+    
+}
+.belowDets{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.studentEnteredBtn{
+    width: 30vw;
+    background-color: #F56B00;
+    color: white;
+    border: none;
+    height: 4.5vh;
+    font-size: 0.9rem;
+    border-radius: 5px;
+}
+
+@media (min-width:340px) {
+    .studentEnteredBtn{
+      
+        width: 35vw;
+    }
+}
+
+@media (min-width:900px) {
+    .studentEnteredBtn{
+        width: 20vw;
+        font-size: 1rem;
+    }
+
+    
+}

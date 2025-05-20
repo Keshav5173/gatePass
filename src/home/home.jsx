@@ -8,6 +8,12 @@ import { doSignOut } from "../firebase/auth";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useOrganisation } from "../contexts/authContext";
+import *as XLSX from "xlsx"
+import StudentHistory from "../studentHistory/studentHistory.jsx";
+import StudentData from "../studentData/studentData.jsx"
+
+
+
 // import { doCreateUserWithEmailAndPassword } from "../firebase/auth";
 // import { getAuth } from "firebase/auth";
 
@@ -39,8 +45,9 @@ function HomePage() {
     const [nostudentData, setNoStudentData] = useState(false);
     const [noBlockedStudentData, setNoBlockedStudentData] = useState(false);
     const [outing, setOuting] = useState(true);
-    const [dates, setDates] = useState([]);
-    const [historyStudentArray, setHistoryStudentArray] = useState([]);
+    const [dispVacation, setDispVacation]=useState(false);
+    const [outingReason, setOutingReason]=useState("");
+    const [returnDate, setReturnDate]=useState("");
 
     useEffect(() => {
         
@@ -83,185 +90,31 @@ function HomePage() {
             console.log("isAdmin (Updated):", isAdminUser);
             return isAdminUser;
         });    
-        fetchStudentsData();
-        fetchBlockedStudentData();
-        fetchDates();
+
+        // fetchDates();
+        // fetchLongVacationStudent();
     }, [organisationId, email, penelty]); 
     
-    
-
-    const fetchStudentsData = () => {
-        const database = getDatabase();
-        const orgId = organisationId || storedOrgId;
-        if (!orgId) return;
-        
-        const usersRef = ref(database, orgId);
-        get(usersRef)
-            .then((snapshot) => {
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    const studentsArray = Object.keys(data).map((studentName) => ({
-                        name: data[studentName].Name,
-                        phoneNo: data[studentName].PhoneNumber,
-                        exitTime: data[studentName].ExitTime,
-                        enrollmentNumber: data[studentName].EnrollmentNumber,
-                    }));
-                    setStudents(studentsArray);
-                    setNoStudentData(false);
-                } else {
-                    setNoStudentData(true);
-                    console.log("No data available");
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-            });
-    };
-    const fetchBlockedStudentData=()=>{
-        const database= getDatabase();
-        const blockedUserRef = ref(database, "blockedStudents");
-        get(blockedUserRef)
-        .then((snapshot)=>{
-            if(snapshot.exists()){
-                const data=snapshot.val();
-                const blockedStudentsArray = Object.keys(data).map((studentData)=>({
-                    name: data[studentData].Name,
-                    phoneNo: data[studentData].PhoneNumber,
-                    blockedTime: data[studentData].blockedTime,
-                    enrollmentNumber: data[studentData].EnrollmentNumber,
-                }))
-                setBlockedStudents(blockedStudentsArray);
-                setNoBlockedStudentData(false);
-            }
-            else{
-                setNoBlockedStudentData(true);
-                console.log("No data available");
-            }
-
-        })
-    }
-
-    const fetchDates = ()=>{
-        const database = getDatabase();
-        const dateRef = ref(database, "History");
-        get(dateRef)
-        .then((snapshot)=>{
-            if(snapshot.exists()){
-                const data= snapshot.val();
-                const datesArray = Object.keys(data);
-                setDates(datesArray);
-                console.log(datesArray);
-            }
-        })
-
-    }
-
-    const deleteStudentData = async (studentName) => { 
-        const database = getDatabase();
-        const orgId = organisationId || storedOrgId;
-    
-        if (!orgId) {
-            console.error("Organization ID is missing.");
-            return;
-        }
-    
-        // Format Time (12-hour format)
-        let now = new Date();
-        let hour = now.getHours();
-        let minute = now.getMinutes();
-        let period = hour >= 12 ? "PM" : "AM";
-    
-        hour = hour % 12 || 12;
-        minute = minute < 10 ? `0${minute}` : minute;
-        const formattedTime = `${hour}:${minute} ${period}`;
-    
-        // Format Date (DD-MM-YYYY)
-        let day = now.getDate();
-        let month = now.getMonth() + 1;  // Fixed: getMonth() starts from 0
-        let year = now.getFullYear();
-        let formattedDate = `${day}-${month}-${year}`;
-    
-        // References
-        const studentRef = ref(database, `${orgId}/${studentName}`);
-        const historyRef = ref(database, `History/${formattedDate}/${studentName}`); 
-    
-        try {
-            const snapshot = await get(studentRef);
-            if (!snapshot.exists()) {
-                console.log("No student data found.");
-                return;
-            }
-    
-            const studentData = snapshot.val();
-            const historySnapshot = await get(historyRef);
-            console.log("Fetched student:", studentData);
-            const studentHistory = historySnapshot.val();
-    
-            // Store in history
-            await set(historyRef, {
-                ...studentHistory, 
-                EntryTime: formattedTime,
-            });
-    
-            // Check Time for Blocking (After 7 PM or before 7 AM)
-            const currentHour = now.getHours();
-            if (currentHour >= 19 || currentHour <= 7) {
-                const blockedRef = ref(database, `blockedStudents/${studentName}`);
-                await set(blockedRef, {
-                    ...studentData,
-                    blockedTime: formattedDate,
-                });
-    
-                console.log(`Student ${studentName} moved to blockedStudents.`);
-                setBlockedStudents(prev => [...prev, { ...studentData, blockedTime: formattedDate }]);
-                setNoBlockedStudentData(false);
-            }
-    
-            // Remove from Main List
-            await remove(studentRef);
-            setStudents(prev => prev.filter(student => student.name !== studentName));
-            console.log(`Student ${studentName} data has been deleted.`);
-    
-            // Refresh UI
-            fetchStudentsData(); 
-    
-        } catch (error) {
-            console.error("Error deleting data:", error);
-        }
-    };
-    
-
-    const handleEnableOuting = async (studentName)=>{
-        const database = getDatabase();
-        const studentRef = ref(database, `blockedStudents/${studentName}`);
-        try{
-            await remove(studentRef);
-            console.log(`student ${studentName} has been removed from blockList`);
-            setBlockedStudents(prevBlockedStudents => prevBlockedStudents.filter(student => student.name !== studentName));
-            fetchBlockedStudentData();
-
-        } 
-        catch(error){
-            alert("Failed to enable outing", error);
-        }
-
-    }
     
 
     const sendDataToRealTimeDatabase = async (event) => {
         event.preventDefault();
     
-        // Check if the time is valid
-        if (new Date().getHours() > 19 || new Date().getHours() < 6) {
+        // ✅ Check if the time is valid (only allow 6 AM - 7 PM)
+        const currentHour = new Date().getHours();
+        if (currentHour >= 19 || currentHour <= 7) {
             alert("Not a valid time.");
             return;
         }
     
-        // Get organization ID
+        // ✅ Get organization ID
         const orgId = organisationId || storedOrgId;
-        if (!orgId) return;
+        if (!orgId) {
+            alert("Organization ID not found.");
+            return;
+        }
     
-        // Format time for ExitTime field
+        // ✅ Format time
         let hour = new Date().getHours();
         let minute = new Date().getMinutes();
         let period = hour >= 12 ? "PM" : "AM";
@@ -272,79 +125,131 @@ function HomePage() {
     
         const formattedTime = `${hour}:${minute} ${period}`;
         let day = new Date().getDate();
-        let month = new Date().getMonth();
+        let month = new Date().getMonth() + 1; // Fix: Month is zero-based
         let year = new Date().getFullYear();
-        let formattedDate = `${day}-${month+1}-${year}`;
+        let formattedDate = `${day}-${month}-${year}`;
     
-        // Get reference to studentDataSet collection in Firestore
-        const studentDataSetRef = collection(db, "studentDataSet");
+        try {
+            // ✅ Fetch Excel file from `/public/`
+            const file = await fetch("/StudentDatabase.xlsx");
+            const data = await file.arrayBuffer();
     
-        onSnapshot(studentDataSetRef, async (querySnapshot) => {
-            const studentList = querySnapshot.docs.map((doc) => ({
-                ...doc.data(),
-                key: doc.id,
+            // ✅ Read Excel file
+            const excelfile = XLSX.read(data, { type: "array" });
+            const excelsheet = excelfile.Sheets[excelfile.SheetNames[0]];
+            const exceljson = XLSX.utils.sheet_to_json(excelsheet);
+
+    
+            // ✅ Format data properly
+            const studentDataset = exceljson.map(student => ({
+                Name: student.studentName,
+                phoneNo: student.phoneNo,
+                EnrollmentNo: student.enrollment // Fix: Ensure correct field
             }));
     
-            const foundStudent = studentList.find(student => student.enrollment === enrollmentNo);
+            console.log("Student Data:", studentDataset);
+    
+            // ✅ Find student using correct key
+            const foundStudent = studentDataset.find(student => `${student.EnrollmentNo}` === enrollmentNo);
     
             if (foundStudent) {
-                // Set student data
-                setName(foundStudent.studentName);
+                // ✅ Set student data
+                setName(foundStudent.Name);
                 setPhoneNo(foundStudent.phoneNo);
     
-                // Initialize both databases if needed
-                const database = getDatabase(); // First database
-                const database2 = getDatabase(); // Second database (if needed)
+                // ✅ Initialize database
+                const database = getDatabase();
+                const database2 = getDatabase();
     
-                // Check if student is blocked in database2 (or use any other database as needed)
+                // ✅ Check if student is blocked
                 const blockedStudentsListRef = ref(database2, `blockedStudents`);
                 const snapshot = await get(blockedStudentsListRef);
     
                 if (snapshot.exists()) {
                     const data = snapshot.val();
-                    const blockedStudent = Object.keys(data).find(studentName => data[studentName].EnrollmentNumber === enrollmentNo);
+                    const blockedStudent = Object.keys(data).find(
+                        studentName => data[studentName].EnrollmentNumber === enrollmentNo
+                    );
     
                     if (blockedStudent) {
                         alert("This student is blocked");
                         setDisp(false);
-                        return; 
+                        return;
                     }
                 }
     
-                // Initialize userRef in the first database
-                const userRef = ref(database, `${orgId}/${foundStudent.studentName}`);
-                const historyRef = ref(database, `History/${formattedDate}/${foundStudent.studentName}`); 
-                
-                
-                
-                set(userRef, {
-                    Name: foundStudent.studentName,
+                // ✅ Set student data in database
+                const userRef = ref(database, `${orgId}/${foundStudent.Name}`);
+                const historyRef = ref(database, `History/${formattedDate}/${foundStudent.Name}`);
+    
+                await set(userRef, {
+                    Name: foundStudent.Name,
+                    PhoneNumber: foundStudent.phoneNo,
+                    EnrollmentNumber: enrollmentNo,
+                    ExitTime: formattedTime
+                });
+    
+                await set(historyRef, {
+                    Name: foundStudent.Name,
                     PhoneNumber: foundStudent.phoneNo,
                     EnrollmentNumber: enrollmentNo,
                     ExitTime: formattedTime,
-                })
-                    .then(() => {
-                        set(historyRef, {
-                            Name: foundStudent.studentName,
-                            PhoneNumber: foundStudent.phoneNo,
-                            EnrollmentNumber: enrollmentNo,
-                            ExitTime: formattedTime,
-                            EntryTime: "",
-                        })
-                        console.log("Student data saved successfully!");
-                        fetchStudentsData();
-                        clearForm();
-                        setDisp(false);
-                    })
-                    .catch((error) => {
-                        console.error("Error saving data:", error);
-                        alert("Failed to save student data.");
-                    });
+                    EntryTime: ""
+                });
+    
+                console.log("Student data saved successfully!");
+                clearForm();
+                setDisp(false);
             } else {
                 alert("Student not found!");
             }
-        });
+        } catch (error) {
+            console.error("Error processing data:", error);
+            alert("An error occurred while processing the Excel file.");
+        }
     };
+
+    const sendDataforLongOuting= async ()=>{
+        let day = new Date().getDate();
+        let month = new Date().getMonth() + 1;
+        let year = new Date().getFullYear();
+        let formattedDate = `${day}-${month}-${year}`;
+        const file = await fetch("/StudentDatabase.xlsx");
+        const data = await file.arrayBuffer();
+
+        // ✅ Read Excel file
+        const excelfile = XLSX.read(data, { type: "array" });
+        const excelsheet = excelfile.Sheets[excelfile.SheetNames[0]];
+        const exceljson = XLSX.utils.sheet_to_json(excelsheet);
+
+    
+            // ✅ Format data properly
+        const studentDataset = exceljson.map(student => ({
+            Name: student.studentName,
+            phoneNo: student.phoneNo,
+            EnrollmentNo: student.enrollment // Fix: Ensure correct field
+        }));
+    
+        console.log("Student Data:", studentDataset);
+    
+            // ✅ Find student using correct key
+        const foundStudent = studentDataset.find(student => `${student.EnrollmentNo}` === enrollmentNo);
+
+        if(foundStudent){
+            const userRef = ref(database, `Vacations/${foundStudent.Name}`);
+
+            await set(userRef, {
+                Name: foundStudent.Name,
+                PhoneNumber: foundStudent.phoneNo,
+                EnrollmentNumber: enrollmentNo,
+                ExitTime: formattedDate,
+                Reason: outingReason,
+                ReturnDate: returnDate,
+            });
+            setDispVacation(false);
+        }
+    }
+    
     
     
 
@@ -359,10 +264,14 @@ function HomePage() {
         setAddUser(true);
       };
 
-    const handleStudentEntered = (studentName) => deleteStudentData(studentName);
     const handleAddStudentClick = () => setDisp(true);
-    const handleBackBtn = () => setDisp(false);
+    const handleVacationClick = ()=> setDispVacation(true);
+    const handleBackBtn = () => {
+        setDisp(false);
+        setDispVacation(false);
+    };
     const handleEnrollmentNoChange = (e) => setEnrollmentNo(e.target.value);
+    const handleReasonChange=(e)=>setOutingReason(e.target.value)
     const handleProfileClick = () => setProfile(true);
     const handleProfileBack = () => setProfile(false);
     const handleOutingClick = ()=> {
@@ -419,40 +328,7 @@ function HomePage() {
             } finally {
                 setIsRegisteringIn(false);
             }
-        };
-
-    const handleFetchOnDateHistory = (event) => {
-    const selectedDate = event.target.value;
-    const database = getDatabase();
-    const historyRef = ref(database, `History/${selectedDate}`);
-
-    console.log("Fetching data for date:", selectedDate);
-
-    get(historyRef)
-        .then((snapshot) => {
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                const studentArray = Object.keys(data).map((student) => ({
-                    exitTime: data[student].ExitTime,
-                    entryTime: data[student].EntryTime,
-                    name: data[student].Name,
-                    phoneNo: data[student].PhoneNumber,
-                }));
-
-                setHistoryStudentArray(studentArray);
-                console.log("Updated History Data:", studentArray);
-            } else {
-                console.log("No data found for this date.");
-                setHistoryStudentArray([]); 
-            }
-        })
-        .catch((error) => {
-            console.error("Error fetching history data:", error);
-        });
-};
-
-    
-        
+    };  
 
     return(
         <div className={styles.main}>
@@ -468,104 +344,20 @@ function HomePage() {
                             <button onClick={handleShowHistory}>History</button>
                         </div>
                     )}
-                    
                     <div className={styles.outsideStudentsList} style={{ top: admin ? "17%" : "8%" }}>
-                        {!nostudentData && outing && (
-                            <>
-                                <h2 className={styles.title}>Students Entries:</h2>
-                                <ol>
-                                    {students.map((student, index) => (
-                                        <li 
-                                            key={index} 
-                                            className={styles.studentItem}
-                                            style={penelty ? { backgroundColor: 'rgba(255, 0, 0, 0.8)' } : { backgroundColor: "aliceblue" }}
-                                        >
-                                            <div className={styles.aboveDets}>
-                                                <h3>{student.name}</h3>
-                                                <h3>{student.exitTime}</h3>
-                                            </div>
-                                            <div className={styles.belowDets}>
-                                                <h4><strong>Phone No.: </strong>{student.phoneNo}</h4>
-                                                <button 
-                                                    onClick={() => {
-                                                        handleStudentEntered(student.name);
-                                                    }} 
-                                                    className={styles.studentEnteredBtn}
-                                                >
-                                                    {penelty ? "Block Outing": "Student Entered"}
-                                                </button>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ol>
-                            </>
-                        )}
-                        {admin && outing && (
-                           <div>
-                                {!noBlockedStudentData && (<h2>Blocked Students:</h2>)}
-                                <ol>
-                                    {blockedStudents.map((student, index) => (
-                                        <li 
-                                            key={index} 
-                                            className={styles.studentItem}
-                                            style={{ backgroundColor: "aliceblue" }}
-                                        >
-                                            <div className={styles.aboveDets}>
-                                                <h3>{student.name}</h3>
-                                                <h3>{student.blockedTime}</h3>
-                                            </div>
-                                            <div className={styles.belowDets}>
-                                                <h4><strong>Phone No.: </strong>{student.phoneNo}</h4>
-                                                <button 
-                                                    onClick={() => {
-                                                        handleEnableOuting(student.name);
-                                                    }} 
-                                                    className={styles.studentEnteredBtn}
-                                                    style={{backgroundColor: "rgb(21, 255, 0)", color: "black"}}
-                                                >
-                                                    Enable Outing
-                                                </button>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ol>
-                           </div>
-                        )}
-                        {!outing && (
-                            <div>
-                                <select onChange={(event)=>{handleFetchOnDateHistory(event)}} name="Dates">
-                                    <option>Select Date</option>
-                                    {dates.map((date, index) => (
-                                        <option key={index} value={date}>{date}</option>
-                                    ))}
-                                </select>
-                                <ol>
-                                    {historyStudentArray.map((student, index) => (
-                                        <li 
-                                            key={index} 
-                                            className={styles.studentItem}
-                                            style={{backgroundColor: "aliceblue"}}
-                                        >
-                                            <div className={styles.aboveDets}>
-                                                <h3>{student.name}</h3>
-                                                <h4>Out: {student.exitTime}</h4>
-                                            </div>
-                                            <div className={styles.belowDets}>
-                                                <h4><strong>Phone No.: </strong>{student.phoneNo}</h4>
-                                                <h4>In: {student.entryTime}</h4>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ol>
-                            </div>
+
+                        {outing && (<StudentData Admin={admin} orgId={organisationId || storedOrgId} />)}
                         
-                        )}
+                        {!outing && (<StudentHistory />)}
+
                     </div>
                 </div>
             )}
             {!suscribed && (
                 <div className={styles.footer}>
-                    <div className={styles.addStudent} onClick={handleAddStudentClick}>Student Entry</div>
+
+                    <div className={styles.addStudent} onClick={handleVacationClick}>Vacations</div>
+                    <div className={styles.addStudent} onClick={handleAddStudentClick}> Student Outing</div>
                 </div>
             )}
             
@@ -579,6 +371,24 @@ function HomePage() {
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
                 </div>
             </div>)}
+
+            {dispVacation &&
+            (<div className={styles.StudentLongOutingSection}>
+                <form onSubmit={sendDataforLongOuting}>
+                <input type="number" required onChange={(e)=>{handleEnrollmentNoChange(e)}} className={styles.vacationInputEnrollment}  placeholder="Enter Enrollment number"/>
+                <select required className={styles.inputOutingReason} onChange={handleReasonChange}>
+                    <option value="Went Home">Going Home</option>
+                    <option value="In Event">Going in Event</option>
+                </select>
+                <h4 className={styles.datesText}>Enter Return Date</h4>
+                <input onChange={(e)=>setReturnDate(e.target.value)} className={styles.inputDate} required type="date" />
+                <button type="submit" className={styles.submitVacBtn}>Submit</button>
+                </form>
+                <div className={styles.cross} onClick={handleBackBtn}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+                </div>
+            </div>)}
+
             {profile &&
             (<div className={styles.profile}>
                 <svg onClick={handleProfileBack} className={styles.profileBack} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>

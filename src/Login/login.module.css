@@ -82,7 +82,7 @@
 }
 .forgetPassword{
     position: absolute;
-    top: 72%;
+    top: 69%;
     font-size: 1.2rem;
     background-color: transparent;
 
@@ -91,18 +91,7 @@
     transform: translateX(-50%);
 
 }
-.line {
-    position: absolute;
-    top: 75%;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    margin: 20px 0;
-    font-size: 1.2rem;
-  }
+
 /* .googleLogin{
     position: absolute;
     top: 85%;
@@ -124,7 +113,7 @@
 .signUp{
     width: 100vw;
     position: absolute;
-    top: 82%;
+    top: 79%;
     text-align: center;
     padding: 0;
     margin: 0;
@@ -138,6 +127,60 @@
 
     }
 }
+
+.resetPass{
+    position: absolute;
+    z-index: 10;
+    width: 100vw;
+    height: 80vh;
+    top: 20%;
+    
+
+}
+.inputNewPassword{
+    background-color: transparent;
+    margin: 40px 20px 0px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+}
+.inputConfirmNewPassword{
+    margin: 40px 20px 0px;
+    color: #121323;
+    width: 70vw;
+    height: 6vh;
+    font-size: 1.3rem;
+    border: none;
+    padding: 0px 10px;
+    border-bottom: 3px solid black;
+}
+.updateNewPassBtn{
+    width: 43vw;
+    height: 7vh;
+    border-radius: 50px;
+    background-color: #F56B00;
+    color: white;
+    border: none;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.3rem;
+
+}
+.passVisibility{
+    height: 3.5vh;
+    position: absolute;
+    margin-left: -60px;
+    margin-top: -17px;
+}
+
+
+
 @media (min-width:900px) {
     .back{
         width: 5vw;
@@ -145,10 +188,10 @@
     .loginBtn{
         width: 40vw;
         height: 8vh;
-        top: 79%;
+        top: 75%;
     }
     .forgetPassword{
-        top: 88%;
+        top: 85%;
         font-size: 1.5rem;
     }
     
@@ -172,10 +215,10 @@
         margin: 40px 20px 0px;
     }
     .loginBtn{
-        top: 76%;
+        top: 70%;
     }
     .forgetPassword{
-        top: 88%;
+        top: 82%;
     }
     
 }
