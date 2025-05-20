@@ -60,6 +60,10 @@ function Register() {
             }
     }; 
 
+    const handleBackRegisterButton=()=>{
+        navigate(-1);
+    }
+
     return (
         <div className={styles.registerMain}>
                     
@@ -73,6 +77,8 @@ function Register() {
             </nav>
 
             <div className={styles.registerHero}>
+                <h1 className={styles.hiiText}>Hii..</h1>
+                <h1 className={styles.registerText}>Register new member</h1>
                     <form onSubmit={onSubmit}>
                     <input
                         className={styles.inputUsername}

@@ -17,6 +17,18 @@
     border: none;
     margin: 20px;
 }
+
+.hiiText{
+    font-size: 2.5rem;
+}
+
+.registerText{
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #8a8b94;
+    margin-top: 10px;
+}
+
 .registerHero{
     width: 100vw;
     height: 80vh;
@@ -117,7 +129,7 @@
 }
 
 @media (min-width:540px) {
-    .back{
+    .backRegister{
         width: 7vw;
         margin: 10px;
     }
@@ -128,7 +140,7 @@
     }
 }
 @media (max-height:650px) {
-    .back{
+    .backRegister{
         width: 4vw;
     }
     .inputEmail{

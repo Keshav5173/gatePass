@@ -139,7 +139,7 @@ function HomePage() {
             const studentDataset = exceljson.map(student => ({
                 Name: student.studentName,
                 phoneNo: student.phoneNo,
-                EnrollmentNo: student.enrollment // Fix: Ensure correct field
+                EnrollmentNo: student.enrollment 
             }));
     
             console.log("Student Data:", studentDataset);
@@ -252,9 +252,7 @@ function HomePage() {
         setEnrollmentNo("");
         setDisp(false);
     };
-    const handleRegisterBtn = (event) => {
-        event.preventDefault()
-        console.log("clicked");
+    const handleRegisterBtn = () => {
         navigate("/register"); 
       };
 
