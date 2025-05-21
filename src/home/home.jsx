@@ -30,28 +30,14 @@ function HomePage() {
     const [storedOrgId, setStoredOrgId] = useState(localStorage.getItem("organisationId") || "");
     const [storedEmailId, setStoredEmailId] = useState(localStorage.getItem("emailId") || "");
     const [admin, setAdmin] = useState(false);
-    const [addUser, setAddUser] = useState(false);
-    const { userLoggedIn, setUserName } = useAuth();
-    const { setOrganisationId } = useOrganisation();
-    const {setEmail} = useOrganisation();
-    const [localUserName, setLocalUserName] = useState('');  
-    const [localEmail, setLocalEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [isRegisteringIn, setIsRegisteringIn] = useState(false);
-    const [penelty, setPenelty] = useState(false);
     const [outing, setOuting] = useState(true);
     const [dispVacation, setDispVacation]=useState(false);
     const [outingReason, setOutingReason]=useState("");
     const [returnDate, setReturnDate]=useState("");
+    const { setOrganisationId } = useOrganisation();
+
 
     useEffect(() => {
-        
-        const currentTime = new Date().getHours();
-        console.log("curentTime: ", currentTime);
-        if(new Date().getHours()>=19 || new Date().getHours()<=7){
-            setPenelty(true);
-        }
-        console.log("Penelty time: ", penelty);
         let storedOrg = localStorage.getItem("organisationId");
         let storedEmail = localStorage.getItem("emailId");
 
@@ -88,7 +74,7 @@ function HomePage() {
 
         // fetchDates();
         // fetchLongVacationStudent();
-    }, [organisationId, email, penelty]); 
+    }, [organisationId, email, ]); 
     
     
 
@@ -126,26 +112,37 @@ function HomePage() {
     
         try {
             // ✅ Fetch Excel file from `/public/`
-            const file = await fetch("/StudentDatabase.xlsx");
+
+            let yearDet = enrollmentNo.slice(3,5)
+
+            const file = await fetch(`./db${yearDet}.xls`);
+            console.log("📦 File fetched:", file.ok, file.status);
             const data = await file.arrayBuffer();
+            console.log("📚 File byte length:", data.byteLength);
     
             // ✅ Read Excel file
             const excelfile = XLSX.read(data, { type: "array" });
             const excelsheet = excelfile.Sheets[excelfile.SheetNames[0]];
+            console.log("ExcelSheets",excelsheet);
             const exceljson = XLSX.utils.sheet_to_json(excelsheet);
+            console.log("Exceljson",exceljson);
+            console.log("🔎 Keys in first row of Excel JSON:", Object.keys(exceljson[0]));
+          
+            console.log("📄 Sheet names:", excelsheet.SheetNames);
 
     
             // ✅ Format data properly
             const studentDataset = exceljson.map(student => ({
-                Name: student.studentName,
-                phoneNo: student.phoneNo,
-                EnrollmentNo: student.enrollment 
-            }));
-    
-            console.log("Student Data:", studentDataset);
-    
-            // ✅ Find student using correct key
-            const foundStudent = studentDataset.find(student => `${student.EnrollmentNo}` === enrollmentNo);
+                Name: `${student["FirstName"]} ${student["MiddleName"] || ''} ${student["LastName"]}`.trim(),
+                phoneNo: student["stud_mobno"],
+                EnrollmentNo: student.EnrolNo,
+                gurdMobNo: student["gurd_mobno"],  
+            }));    
+
+            console.log("✅ Processed Student Dataset:", studentDataset);
+
+            // ✅ Example usage: find a specific student
+           const foundStudent = studentDataset.find(student => `${student.EnrollmentNo}` === enrollmentNo);
     
             if (foundStudent) {
                 // ✅ Set student data
@@ -180,6 +177,7 @@ function HomePage() {
                 await set(userRef, {
                     Name: foundStudent.Name,
                     PhoneNumber: foundStudent.phoneNo,
+                    gurdian_phoneNo: foundStudent.gurdMobNo,
                     EnrollmentNumber: enrollmentNo,
                     ExitTime: formattedTime
                 });

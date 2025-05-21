@@ -21,7 +21,7 @@ function StudentData(props){
             setPenelty(true);
         }
         console.log("Penelty time: ", penelty);
-
+        
         fetchStudentsData();
         fetchBlockedStudentData();
     },[penelty])
@@ -78,7 +78,7 @@ const fetchStudentsData = () => {
 
     const deleteStudentData = async (studentName) => { 
         const database = getDatabase();
-        const organisationId = organisationId || storedorganisationId;
+        const organisationId = props.orgId;
     
         if (!organisationId) {
             console.error("Organization ID is missing.");
@@ -216,7 +216,7 @@ const fetchStudentsData = () => {
                             style={penelty ? { backgroundColor: 'rgba(255, 0, 0, 0.8)' } : { backgroundColor: "aliceblue" }}
                         >
                             <div className={styles.aboveDets}>
-                                <h3>{student.name}</h3>
+                                <h4>{student.name}</h4>
                                 <h3>{student.exitTime}</h3>
                             </div>
                             <div className={styles.belowDets}>
@@ -246,11 +246,11 @@ const fetchStudentsData = () => {
                             style={{ backgroundColor: "aliceblue" }}
                         >
                             <div className={styles.aboveDets}>
-                                <h3>{student.name}</h3>
+                                <h4>{student.name}</h4>
                                 <h3>{student.blockedTime}</h3>
                             </div>
                             <div className={styles.belowDets}>
-                                <h4><strong>Phone No.: </strong>{student.phoneNo}</h4>
+                                <h5><strong>Phone No.: </strong>{student.phoneNo}</h5>
                                 <button 
                                     onClick={() => {
                                         handleEnableOuting(student.name);
