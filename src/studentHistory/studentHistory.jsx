@@ -23,7 +23,6 @@ function StudentHistory(){
                 const data= snapshot.val();
                 const datesArray = Object.keys(data);
                 setDates(datesArray);
-                console.log(datesArray);
             }
         })
 

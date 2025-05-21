@@ -202,28 +202,38 @@ function HomePage() {
         }
     };
 
-    const sendDataforLongOuting= async ()=>{
+    const sendDataforLongOuting= async (e)=>{
+        e.preventDefault();
         let day = new Date().getDate();
         let month = new Date().getMonth() + 1;
         let year = new Date().getFullYear();
-        let formattedDate = `${day}-${month}-${year}`;
-        const file = await fetch("/StudentDatabase.xlsx");
-        const data = await file.arrayBuffer();
+        let formattedDate = `${year}-${month}-${day}`;
+        let yearDet = enrollmentNo.slice(3,5)
 
-        // ✅ Read Excel file
-        const excelfile = XLSX.read(data, { type: "array" });
-        const excelsheet = excelfile.Sheets[excelfile.SheetNames[0]];
-        const exceljson = XLSX.utils.sheet_to_json(excelsheet);
+            const file = await fetch(`./db${yearDet}.xls`);
+            console.log("📦 File fetched:", file.ok, file.status);
+            const data = await file.arrayBuffer();
+            console.log("📚 File byte length:", data.byteLength);
+    
+            // ✅ Read Excel file
+            const excelfile = XLSX.read(data, { type: "array" });
+            const excelsheet = excelfile.Sheets[excelfile.SheetNames[0]];
+            console.log("ExcelSheets",excelsheet);
+            const exceljson = XLSX.utils.sheet_to_json(excelsheet);
+            console.log("Exceljson",exceljson);
+            console.log("🔎 Keys in first row of Excel JSON:", Object.keys(exceljson[0]));
+          
+            console.log("📄 Sheet names:", excelsheet.SheetNames);
 
     
             // ✅ Format data properly
-        const studentDataset = exceljson.map(student => ({
-            Name: student.studentName,
-            phoneNo: student.phoneNo,
-            EnrollmentNo: student.enrollment // Fix: Ensure correct field
-        }));
-    
-        console.log("Student Data:", studentDataset);
+            const studentDataset = exceljson.map(student => ({
+                Name: `${student["FirstName"]} ${student["MiddleName"] || ''} ${student["LastName"]}`.trim(),
+                phoneNo: student["stud_mobno"],
+                EnrollmentNo: student.EnrolNo,
+                gurdMobNo: student["gurd_mobno"],  
+            }));    
+
     
             // ✅ Find student using correct key
         const foundStudent = studentDataset.find(student => `${student.EnrollmentNo}` === enrollmentNo);
@@ -238,7 +248,10 @@ function HomePage() {
                 ExitTime: formattedDate,
                 Reason: outingReason,
                 ReturnDate: returnDate,
+                gurdianPhoneNo: foundStudent.gurdMobNo,
             });
+
+            console.log(`Registered ${foundStudent.Name} in long outing`);
             setDispVacation(false);
         }
     }
@@ -326,7 +339,7 @@ function HomePage() {
 
             {dispVacation &&
             (<div className={styles.StudentLongOutingSection}>
-                <form onSubmit={sendDataforLongOuting}>
+                <form onSubmit={(e)=>{sendDataforLongOuting(e)}}>
                 <input type="number" required onChange={(e)=>{handleEnrollmentNoChange(e)}} className={styles.vacationInputEnrollment}  placeholder="Enter Enrollment number"/>
                 <select required className={styles.inputOutingReason} onChange={handleReasonChange}>
                     <option value="Went Home">Going Home</option>
