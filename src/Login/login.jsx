@@ -203,10 +203,10 @@ function Login() {
                                 placeholder="Enter Organisation ID"
                             />
                             
-                            <button onClick={handleForgetPassword} className={styles.forgetPassword}>Forget password?</button>
                             <button className={styles.loginBtn} disabled={isSignIn} type="submit">
                                 {isSignIn ? 'Signing In...' : 'Sign In'}
                             </button>
+                            <button onClick={handleForgetPassword} className={styles.forgetPassword}>Forget password?</button>
                         </form>
                     </div>
                 )}
