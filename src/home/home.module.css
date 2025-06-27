@@ -45,19 +45,42 @@
     
 }
 
-.StudentEntrySection{
-    position: relative;
+.StudentEntrySection {
     position: absolute;
     z-index: 5;
     background-color: aliceblue;
-    top: 40%;
+    top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     
-    width: 80vw;
-    height: 40vh;
-    box-shadow: 5px 5px 20px rgba(0,0,0);
+    width: 85vw;
+    max-width: 600px;
+    height: auto;
+    min-height: 300px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
+
+.StudentEntrySection .scannerContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.StudentEntrySection .scannerContainer video {
+    width: 100% !important;
+    border-radius: 12px;
+    max-height: 250px;
+    object-fit: cover;
+}
+
+
 .StudentLongOutingSection{
     position: relative;
     position: absolute;
@@ -112,9 +135,8 @@
     left: 4%;
 }
 
-.submitBtn{
+.StudentEntrySection button{
     position: absolute;
-    top:72%;
     left: 50%;
     transform: translateX(-50%);
     color: white;
@@ -126,6 +148,13 @@
     font-size: 1.6rem;
 
 
+}
+.submitBtn{
+    top:72%;
+}
+.scannerbtn{
+    position: absolute;
+    top: 5%;
 }
 .submitVacBtn{
     position: absolute;
@@ -279,6 +308,13 @@
     }
 }
 @media (min-width:900px) {
+    .StudentEntrySection input{
+        width: 30vw;
+    }
+    .StudentEntrySection button{
+        width: 15vw;
+
+    }
     .studentEnteredBtn{
         width: 20vw;
         font-size: 1rem;

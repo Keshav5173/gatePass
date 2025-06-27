@@ -107,6 +107,11 @@
 }
 
 @media (min-width:900px) {
+    .studentItem{
+        width: 80vw;
+        height: 11vh;
+        font-size: large;
+    }
     .studentEnteredBtn{
         width: 17vw;
         font-size: 1rem;

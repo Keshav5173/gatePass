@@ -11,6 +11,7 @@ import { useOrganisation } from "../contexts/authContext";
 import *as XLSX from "xlsx"
 import StudentHistory from "../studentHistory/studentHistory.jsx";
 import StudentData from "../studentData/studentData.jsx"
+import { Scanner } from '@yudiel/react-qr-scanner';
 
 
 
@@ -35,6 +36,7 @@ function HomePage() {
     const [outingReason, setOutingReason]=useState("");
     const [returnDate, setReturnDate]=useState("");
     const { setOrganisationId } = useOrganisation();
+    const [scan, setScan] = useState(false);
 
 
     useEffect(() => {
@@ -78,16 +80,20 @@ function HomePage() {
     
     
 
-    const sendDataToRealTimeDatabase = async (event) => {
+    const sendDataToRealTimeDatabase = async (event, enrollParam = null) => {
         event.preventDefault();
-    
+        const enrollment = enrollParam || enrollmentNo;
+        console.log("Enrollment Number : ", enrollment);
         // ✅ Check if the time is valid (only allow 6 AM - 7 PM)
         const currentHour = new Date().getHours();
-        if (currentHour >= 19 || currentHour <= 7) {
+        if (currentHour >= 20 || currentHour <= 7) {
             alert("Not a valid time.");
             return;
         }
-    
+        if (!enrollment) {
+        alert("Enrollment number is missing.");
+        return;
+    }
         // ✅ Get organization ID
         const orgId = organisationId || storedOrgId;
         if (!orgId) {
@@ -113,11 +119,16 @@ function HomePage() {
         try {
             // ✅ Fetch Excel file from `/public/`
 
-            let yearDet = enrollmentNo.slice(3,5)
+            let yearDet = enrollment.slice(3,5)
 
             const file = await fetch(`./db${yearDet}.xls`);
+            if (!file.ok) {
+                throw new Error(`❌ Failed to fetch file db${yearDet}.xls`);
+            }
             console.log("📦 File fetched:", file.ok, file.status);
             const data = await file.arrayBuffer();
+
+
             console.log("📚 File byte length:", data.byteLength);
     
             // ✅ Read Excel file
@@ -142,7 +153,7 @@ function HomePage() {
             console.log("✅ Processed Student Dataset:", studentDataset);
 
             // ✅ Example usage: find a specific student
-           const foundStudent = studentDataset.find(student => `${student.EnrollmentNo}` === enrollmentNo);
+           const foundStudent = studentDataset.find(student => `${student.EnrollmentNo}` === enrollment);
     
             if (foundStudent) {
                 // ✅ Set student data
@@ -160,7 +171,7 @@ function HomePage() {
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     const blockedStudent = Object.keys(data).find(
-                        studentName => data[studentName].EnrollmentNumber === enrollmentNo
+                        studentName => data[studentName].EnrollmentNumber === enrollment
                     );
     
                     if (blockedStudent) {
@@ -178,14 +189,14 @@ function HomePage() {
                     Name: foundStudent.Name,
                     PhoneNumber: foundStudent.phoneNo,
                     gurdian_phoneNo: foundStudent.gurdMobNo,
-                    EnrollmentNumber: enrollmentNo,
+                    EnrollmentNumber: enrollment,
                     ExitTime: formattedTime
                 });
     
                 await set(historyRef, {
                     Name: foundStudent.Name,
                     PhoneNumber: foundStudent.phoneNo,
-                    EnrollmentNumber: enrollmentNo,
+                    EnrollmentNumber: enrollment,
                     ExitTime: formattedTime,
                     EntryTime: ""
                 });
@@ -292,6 +303,9 @@ function HomePage() {
             navigate("/login");
         });
     };
+    const handleScanner = () => {
+        setScan(true);
+    };
     
         
 
@@ -328,10 +342,44 @@ function HomePage() {
             
             {disp &&
             (<div className={styles.StudentEntrySection}>
-                <form onSubmit={sendDataToRealTimeDatabase}>
-                <input type="number" required onChange={(e)=>{handleEnrollmentNoChange(e)}} className={styles.inputEnrollment}  placeholder="Enter Enrollment number"/>
-                <button type="submit" className={styles.submitBtn}>Submit</button>
-                </form>
+                <div>
+                    <button className={styles.scannerBtn} onClick={handleScanner}>Scan</button>
+                </div>
+                {scan && (
+                    <div className="scannerContainer">
+                    <Scanner
+                        onScan={async (result) => {
+                            if (Array.isArray(result) && result.length > 0) {
+                                const scannedValue = result[0].rawValue;
+                                console.log("The enrollment number is : ", scannedValue);
+                                setEnrollmentNo(scannedValue); // optional, for UI use
+                                const fakeEvent = { preventDefault: () => {} };
+                                await sendDataToRealTimeDatabase(fakeEvent, scannedValue);
+                            }
+                        }}
+                        onError={(error) => {
+                            alert("QR Scanner error:", error);
+                            setScan(false);
+                        }}
+                        paused={false}
+                        torch={true}
+                        zoom={false}
+                        finder={false}
+                        onOff={false}
+                        style={{ width: '10%', maxWidth: '500px' }}
+                        containerStyle={{ border: '2px solid black', borderRadius: '12px' }}
+                        videoStyle={{ borderRadius: '8px' }}
+                        finderBorder={3}
+
+                    />
+                </div>
+                )}
+                 {!scan && ( 
+                    <form onSubmit={sendDataToRealTimeDatabase}>
+                    <input type="number" required onChange={(e)=>{handleEnrollmentNoChange(e)}} className={styles.inputEnrollment}  placeholder="Enter Enrollment number"/>
+                    <button type="submit" className={styles.submitBtn}>Submit</button>
+                    </form>
+                 )}
                 <div className={styles.cross} onClick={handleBackBtn}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
                 </div>
