@@ -65,7 +65,6 @@ function Login() {
                 ...doc.data()
             }));
 
-            console.log("Users from Firestore:", users);
 
             const foundOrganisation = users.find(user => user.orgId === organisationId && user.email===localEmail && user.password===password);
 
@@ -86,8 +85,7 @@ function Login() {
             navigate("/home", { state: { organisationId } });
 
         } catch (error) {
-            alert(error.message);
-            console.log("Organisation ID after submission:", organisationId);
+            alert(error.message)
             console.log(error);
             setIsSignIn(false);
         }
@@ -101,11 +99,11 @@ function Login() {
         e.preventDefault();  // Prevent form submission refresh
     
         try {
-            setSettingNewPass(true);  // ✅ Use the correct function
+            setSettingNewPass(true); 
     
             if (newPassword !== confirmNewPassword) {
                 alert("Passwords do not match!");
-                setSettingNewPass(false);  // ✅ Use the correct function
+                setSettingNewPass(false); 
                 return;
             }
     

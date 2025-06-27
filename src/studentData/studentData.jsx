@@ -15,12 +15,11 @@ function StudentData(props){
 
 
     useEffect(()=>{
-    const currentTime = new Date().getHours();
-        console.log("curentTime: ", currentTime);
+
         if(new Date().getHours()>=19 || new Date().getHours()<=7){
             setPenelty(true);
         }
-        console.log("Penelty time: ", penelty);
+    
         
         fetchStudentsData();
         fetchBlockedStudentData();
@@ -114,7 +113,7 @@ const fetchStudentsData = () => {
     
             const studentData = snapshot.val();
             const historySnapshot = await get(historyRef);
-            console.log("Fetched student:", studentData);
+            
             const studentHistory = historySnapshot.val();
     
             // Store in history
@@ -132,15 +131,13 @@ const fetchStudentsData = () => {
                     blockedTime: formattedDate,
                 });
     
-                console.log(`Student ${studentName} moved to blockedStudents.`);
                 setBlockedStudents(prev => [...prev, { ...studentData, blockedTime: formattedDate }]);
                 setNoBlockedStudentData(false);
             }
     
             // Remove from Main List
             await remove(studentRef);
-            setStudents(prev => prev.filter(student => student.name !== studentName));
-            console.log(`Student ${studentName} data has been deleted.`);
+            setStudents(prev => prev.filter(student => student.name !== studentName))
     
             // Refresh UI
             fetchStudentsData(); 
@@ -193,9 +190,6 @@ const fetchStudentsData = () => {
 
         setSearchList(filtered); // show matching results
 
-
-
-        console.log(searchList);
     };
 
 

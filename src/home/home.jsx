@@ -69,8 +69,6 @@ function HomePage() {
         setAdmin((prevAdmin) => {
             const currentEmail = storedEmail || email; // Use latest available email
             const isAdminUser = currentEmail === "bhardwajkeshav5173@gmail.com" || currentEmail==="sharmapalak27062004@gmail.com";
-            console.log("Email (Admin Check):", currentEmail);
-            console.log("isAdmin (Updated):", isAdminUser);
             return isAdminUser;
         });    
 
@@ -83,10 +81,9 @@ function HomePage() {
     const sendDataToRealTimeDatabase = async (event, enrollParam = null) => {
         event.preventDefault();
         const enrollment = enrollParam || enrollmentNo;
-        console.log("Enrollment Number : ", enrollment);
         // ✅ Check if the time is valid (only allow 6 AM - 7 PM)
         const currentHour = new Date().getHours();
-        if (currentHour >= 20 || currentHour <= 7) {
+        if (currentHour >= 19 || currentHour <= 7) {
             alert("Not a valid time.");
             return;
         }
@@ -125,7 +122,7 @@ function HomePage() {
             if (!file.ok) {
                 throw new Error(`❌ Failed to fetch file db${yearDet}.xls`);
             }
-            console.log("📦 File fetched:", file.ok, file.status);
+            
             const data = await file.arrayBuffer();
 
 
@@ -134,12 +131,9 @@ function HomePage() {
             // ✅ Read Excel file
             const excelfile = XLSX.read(data, { type: "array" });
             const excelsheet = excelfile.Sheets[excelfile.SheetNames[0]];
-            console.log("ExcelSheets",excelsheet);
+            
             const exceljson = XLSX.utils.sheet_to_json(excelsheet);
-            console.log("Exceljson",exceljson);
-            console.log("🔎 Keys in first row of Excel JSON:", Object.keys(exceljson[0]));
-          
-            console.log("📄 Sheet names:", excelsheet.SheetNames);
+
 
     
             // ✅ Format data properly
@@ -150,7 +144,6 @@ function HomePage() {
                 gurdMobNo: student["gurd_mobno"],  
             }));    
 
-            console.log("✅ Processed Student Dataset:", studentDataset);
 
             // ✅ Example usage: find a specific student
            const foundStudent = studentDataset.find(student => `${student.EnrollmentNo}` === enrollment);
@@ -204,6 +197,8 @@ function HomePage() {
                 console.log("Student data saved successfully!");
                 clearForm();
                 setDisp(false);
+
+                setScan(false);
             } else {
                 alert("Student not found!");
             }
@@ -222,19 +217,15 @@ function HomePage() {
         let yearDet = enrollmentNo.slice(3,5)
 
             const file = await fetch(`./db${yearDet}.xls`);
-            console.log("📦 File fetched:", file.ok, file.status);
-            const data = await file.arrayBuffer();
-            console.log("📚 File byte length:", data.byteLength);
+
+            const data = await file.arrayBuffer(); 
     
             // ✅ Read Excel file
             const excelfile = XLSX.read(data, { type: "array" });
             const excelsheet = excelfile.Sheets[excelfile.SheetNames[0]];
-            console.log("ExcelSheets",excelsheet);
+            
             const exceljson = XLSX.utils.sheet_to_json(excelsheet);
-            console.log("Exceljson",exceljson);
-            console.log("🔎 Keys in first row of Excel JSON:", Object.keys(exceljson[0]));
-          
-            console.log("📄 Sheet names:", excelsheet.SheetNames);
+            
 
     
             // ✅ Format data properly
@@ -283,6 +274,7 @@ function HomePage() {
     const handleBackBtn = () => {
         setDisp(false);
         setDispVacation(false);
+        setScan(false);
     };
     const handleEnrollmentNoChange = (e) => setEnrollmentNo(e.target.value);
     const handleReasonChange=(e)=>setOutingReason(e.target.value)

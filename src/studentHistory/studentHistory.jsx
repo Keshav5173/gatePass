@@ -74,7 +74,7 @@ function StudentHistory(){
                         }));
     
                         setHistoryStudentArray(studentArray);
-                        console.log("Updated History Data:", studentArray);
+                        
                     } else {
                         console.log("No data found for this date.");
                         setHistoryStudentArray([]); 
