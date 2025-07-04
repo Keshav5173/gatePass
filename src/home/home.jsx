@@ -336,6 +336,7 @@ function HomePage() {
             (<div className={styles.StudentEntrySection}>
                 <div>
                     <button className={styles.scannerBtn} onClick={handleScanner}>Scan</button>
+                    <p className={styles.orText}>OR</p>
                 </div>
                 {scan && (
                     <div className="scannerContainer">
